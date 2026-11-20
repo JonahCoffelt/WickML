@@ -1,6 +1,7 @@
 from Helpers import load_iris, normalized_split, load_mnist, train_valid_test_split, accuracy, np
 from NeuralNetworks import *
 from ConvolutionalNeuralNetworks import *
+from Optimizers import SGD
 
 def test_mnist_cnn():
     model = NeuralNetwork(
@@ -30,7 +31,8 @@ def test_mnist_cnn():
     X_test = X_test.reshape(-1, 1, 28, 28)
 
     print("Begin training:")
-    model.train(X_train, Y_train, learning_rate=0.05, batch_size=128, epochs=15)
+    optimizer = SGD(0.05, 128, 15)
+    optimizer.train(model, X_train, Y_train)
 
     print("Begin testing:")
     print("MNIST CNN test accuracy:", accuracy(model, X_test, Y_test))

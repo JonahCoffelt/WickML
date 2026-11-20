@@ -1,5 +1,6 @@
 from NeuralNetworks import NeuralNetwork, Linear, ReLU, CrossEntropy
 from Helpers import load_mnist, train_valid_test_split, accuracy
+from Optimizers import SGD
 
 
 def test_regularization():
@@ -36,9 +37,9 @@ def test_regularization():
 
     # Train
     print("Begin training no regularization:")
-    model_none.train(X_train, Y_train, learning_rate=0.1, batch_size=64, epochs=100)
+    SGD(0.1, 64, 100).train(model_none, X_train, Y_train)
     print("Begin training with regularization:")
-    model_regularization.train(X_train, Y_train, learning_rate=0.1, batch_size=64, epochs=100)
+    SGD(0.1, 64, 100).train(model_regularization, X_train, Y_train)
 
     # Test
     print("Begin testing:")

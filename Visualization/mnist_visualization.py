@@ -6,6 +6,7 @@ from matplotlib.ticker import MaxNLocator
 from Helpers import load_mnist, train_valid_test_split, accuracy
 from NeuralNetworks import NeuralNetwork, Linear, BatchNorm1d, ReLU, Dropout, CrossEntropy
 from NeuralNetworks.loss import softmax
+from Optimizers import SGD
 
 
 def save_figure(fig, name: str) -> None:
@@ -142,7 +143,7 @@ def main() -> None:
         ),
         CrossEntropy(),
     )
-    linear_model.train(X_train, Y_train, learning_rate=0.1, batch_size=128, epochs=100)
+    SGD(0.1, 128, 100).train(linear_model, X_train, Y_train)
     print("MNIST linear test accuracy:", accuracy(linear_model, X_test, Y_test))
     visualize_mnist_linear_outputs(linear_model)
 
@@ -163,8 +164,9 @@ def main() -> None:
 
     # train one epoch at a time so the loss and accuracy can be recorded after each epoch
     history = {"train_loss": [], "valid_loss": [], "train_accuracy": [], "valid_accuracy": []}
+    optimizer = SGD(0.1, 128, 1)  # created once so the shuffle order differs every epoch
     for epoch in range(20):
-        deep_model.train(X_train, Y_train, learning_rate=0.1, batch_size=128, epochs=1)
+        optimizer.train(deep_model, X_train, Y_train)
         history["train_loss"].append(cross_entropy(deep_model, X_train, Y_train))
         history["valid_loss"].append(cross_entropy(deep_model, X_valid, Y_valid))
         history["train_accuracy"].append(accuracy(deep_model, X_train, Y_train))

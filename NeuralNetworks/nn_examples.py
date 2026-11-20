@@ -1,7 +1,7 @@
 from Helpers import load_iris, normalized_split, load_mnist, train_valid_test_split, accuracy, np
 from NeuralNetworks import *
 from ConvolutionalNeuralNetworks import *
-
+from Optimizers import SGD
 
 def test_iris():
     # Create model
@@ -22,7 +22,8 @@ def test_iris():
 
     # Train
     print("Begin training:")
-    model.train(X_train, Y_train, learning_rate=0.01, batch_size=32, epochs=500)
+    optimizer = SGD(0.01, 32, 500)
+    optimizer.train(model, X_train, Y_train)
 
     # Test
     print("Begin testing:")
@@ -52,7 +53,8 @@ def test_mnist():
 
     # Train
     print("Begin training:")
-    model.train(X_train, Y_train, learning_rate=0.1, batch_size=128, epochs=5)
+    optimizer = SGD(0.1, 128, 5)
+    optimizer.train(model, X_train, Y_train)
 
     # Test
     print("Begin testing:")

@@ -4,10 +4,11 @@ from ConvolutionalNeuralNetworks import *
 from NeuralNetworks import *
 from Helpers import load_cifar10, RandomFlipCrop
 from Experiments import get_linear_model, get_neural_network, get_LeNet, get_ResNet
-from Experiments.mnist_comparison import EPOCHS, train_and_evaluate, write_results
+from Experiments.mnist_comparison import train_and_evaluate, write_results
 
 RESULTS_PATH = Path(__file__).parent / "cifar10_comparison.md"
 N_TRAIN = 50000
+EPOCHS = 125
 
 def compare_models():
 
@@ -27,10 +28,10 @@ def compare_models():
     n_classes = 10
 
     # Every model gets the same number of epochs
-    schedule = [(0.05, EPOCHS)]
+    schedule = [(0.001, EPOCHS)]
     # The ResNet decays its learning rate in three phases (2/3, 2/9, and the remaining 1/9 of the epochs)
     phase1, phase2 = round(EPOCHS * 2 / 3), round(EPOCHS * 2 / 9)
-    resnet_schedule = [(0.1, phase1), (0.01, phase2), (0.001, EPOCHS - phase1 - phase2)]
+    resnet_schedule = [(0.001, phase1), (0.0001, phase2), (0.00001, EPOCHS - phase1 - phase2)]
 
     results = []
 
@@ -50,10 +51,10 @@ def compare_models():
     results.append(train_and_evaluate("LeNet model", model, X_train, Y_train, X_test, Y_test, schedule))
 
     # ResNet
-    print("\n\nLoading ResNet-20 model...")
-    model = get_ResNet(n_classes, in_channels)
+    print("\n\nLoading ResNet-44 model...")
+    model = get_ResNet(n_classes, in_channels, 44)
     aug = RandomFlipCrop()  # random horizontal flips and 4-pixel shifts
-    results.append(train_and_evaluate("ResNet-20 model", model, X_train, Y_train, X_test, Y_test, resnet_schedule, augment=aug))
+    results.append(train_and_evaluate("ResNet-44 model", model, X_train, Y_train, X_test, Y_test, resnet_schedule, augment=aug))
 
     write_results(results, RESULTS_PATH, title="CIFAR-10 Model Comparison", augmentation="random flip and shift augmentation")
 

@@ -4,6 +4,7 @@ from pathlib import Path
 from ConvolutionalNeuralNetworks import *
 from NeuralNetworks import *
 from Helpers import accuracy, load_mnist, train_valid_test_split, RandomFlipCrop
+from Optimizers import AdamW
 from Experiments import get_linear_model, get_neural_network, get_LeNet, get_ResNet
 
 EPOCHS = 45  # total training epochs for every model
@@ -20,8 +21,11 @@ def train_and_evaluate(name, model, X_train, Y_train, X_test, Y_test, schedule, 
     print(f"Begin training {name}:")
     losses = []
     start = time.perf_counter()
+    optimizer = AdamW(batch_size=128, augment=augment)
     for learning_rate, epochs in schedule:
-        losses += model.train(X_train, Y_train, learning_rate=learning_rate, batch_size=128, epochs=epochs, augment=augment)
+        optimizer.learning_rate = learning_rate
+        optimizer.epochs = epochs
+        losses += optimizer.train(model, X_train, Y_train)
     elapsed = time.perf_counter() - start
 
     test_accuracy = float(accuracy(model, X_test, Y_test))
@@ -44,9 +48,9 @@ def write_results(results, path=RESULTS_PATH, title="MNIST Model Comparison", au
     lines = [
         f"# {title}",
         "",
-        f"Every model was trained for {results[0]['epochs']} epochs with a batch size of 128. "
-        "The linear model, neural network, and LeNet use a learning rate of 0.05. "
-        f"The ResNet uses learning rates of 0.1, 0.01, and 0.001 in three phases, with {augmentation}.",
+        f"Every model was trained for {results[0]['epochs']} epochs with the Adam optimizer and a batch size of 128. "
+        "The linear model, neural network, and LeNet use a learning rate of 0.001. "
+        f"The ResNet uses learning rates of 0.001, 0.0001, and 0.00001 in three phases, with {augmentation}.",
         "",
         "| Model | Test accuracy | Best training loss | Time per epoch |",
         "|---|---|---|---|",
@@ -76,10 +80,10 @@ def compare_models():
     n_classes = 10
 
     # Every model gets the same number of epochs
-    schedule = [(0.05, EPOCHS)]
+    schedule = [(0.001, EPOCHS)]
     # The ResNet decays its learning rate in three phases (2/3, 2/9, and the remaining 1/9 of the epochs)
     phase1, phase2 = round(EPOCHS * 2 / 3), round(EPOCHS * 2 / 9)
-    resnet_schedule = [(0.1, phase1), (0.01, phase2), (0.001, EPOCHS - phase1 - phase2)]
+    resnet_schedule = [(0.001, phase1), (0.0001, phase2), (0.00001, EPOCHS - phase1 - phase2)]
 
     results = []
 
