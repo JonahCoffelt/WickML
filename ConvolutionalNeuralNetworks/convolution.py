@@ -45,8 +45,6 @@ class Conv2d(Layer):
         # Get cols
         cols = windows.transpose(0, 2, 3, 1, 4, 5).reshape(N * H_out * W_out, -1)
 
-        # Only backprop needs these. Caching them in eval would keep every conv's im2col buffer alive at once,
-        # which for a deep net at the eval batch size exhausts GPU memory.
         if self.training:
             self.x_pad = x_pad
             self.cols = cols
