@@ -24,7 +24,7 @@ def get_neural_network(in_features: int, n_classes: int, n_hidden_layers: int=2,
 def get_LeNet(in_channels: int = 3, n_classes: int = 10, conv1_padding: int = 0) -> NeuralNetwork:
     model = NeuralNetwork(
         (
-            Conv2d(in_channels, 6, 5, padding=conv1_padding),  # 32x32 input needs 0, 28x28 (MNIST) needs 2
+            Conv2d(in_channels, 6, 5, padding=conv1_padding),
             BatchNorm2d(6),
             ReLU(),
             MaxPool2d(2, 2),

@@ -1,5 +1,6 @@
-# Machine Learning Notes
-This is a collection of my personal machine learning notes and code implementations. Largely based on the following resources:
+![logo](Images/wickml_logo.png)
+
+A light weight machine learning framework inspired by PyTorch. Inlcudes a collection of my personal machine learning notes and code implementations. Largely based on the following resources:
 
 - Lectures and slides by Dr. Ji
 - Learning From Data textbook. 
