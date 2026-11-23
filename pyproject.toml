@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "machine-learning-notes"
+name = "wick-ml"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = ["numpy", "cupy-cuda12x", "cupy-cuda12x[ctk]", "scikit-learn", "matplotlib"]
