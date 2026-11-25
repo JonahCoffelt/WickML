@@ -69,13 +69,13 @@ class Attention(Layer):
         # Attend to V
         y = attention @ V_heads
 
-        # Concatinate heads
+        # Concatenate heads
         y = y.transpose(0, 2, 1, 3).reshape(batch_size, sequence_length, channels)
 
         # Y projection
         y = self.Y_projection(y)
 
-        # Droout
+        # Dropout
         y = self.residual_dropout(y)
 
         return y
