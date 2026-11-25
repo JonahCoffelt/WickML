@@ -6,3 +6,4 @@ from .dropout import Dropout
 from .batch_norm import BatchNorm1d, BatchNorm2d
 from .loss import Loss, CrossEntropy
 from .flatten import Flatten
+from .softmax import softmax

@@ -1,4 +1,5 @@
 from NeuralNetworks.layer import Layer
+from NeuralNetworks import softmax
 # import numpy as np
 from Helpers import np
 
@@ -49,8 +50,11 @@ class Linear(Layer):
             numpy array (n_samples, in_dim) of gradient of the loss function with respect to the input of this layer
         """
         
-        self.dW = self.x.T @ sensitivity + self.weight_penalty * self.W
-        self.db = sensitivity.sum(axis=0)
+        x_2d = self.x.reshape(-1, self.in_dim)
+        s_2d = sensitivity.reshape(-1, self.out_dim)
+
+        self.dW = x_2d.T @ s_2d + self.weight_penalty * self.W
+        self.db = s_2d.sum(axis=0)
         return sensitivity @ self.W.T
 
     def params(self) -> list[np.ndarray]:

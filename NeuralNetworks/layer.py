@@ -1,4 +1,4 @@
-import numpy as np
+from Helpers import np
 
 
 class Layer:
@@ -17,3 +17,6 @@ class Layer:
 
     def grads(self) -> list[np.ndarray]: 
         return []
+
+    def __call__(self, x):
+        return self.forward(x)
